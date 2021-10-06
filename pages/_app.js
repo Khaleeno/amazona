@@ -1,9 +1,10 @@
-import '../styles/globals.css'
-import {useEffect} from 'react'
+import "../styles/globals.css"
+import { useEffect } from "react"
+import { StoreProvider } from "../utils/store"
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side');
+    const jssStyles = document.querySelector("#jss-server-side")
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles)
     }
@@ -11,7 +12,11 @@ function MyApp({ Component, pageProps }) {
     //   cleanup
     // }
   }, [])
-  return <Component {...pageProps} />
+  return (
+    <StoreProvider>
+      <Component {...pageProps} />
+    </StoreProvider>
+  )
 }
 
 export default MyApp
