@@ -13,9 +13,28 @@ import NextLink from "next/link"
 import Layout from "../components/Layout"
 import db from "../utils/db"
 import Product from "../models/Product"
+import { useContext } from "react"
+import { Store } from "../utils/store"
+import { useRouter } from "next/router"
+import axios from "axios"
 
 export default function Home(props) {
-  const {products} = props
+  const { products } = props
+  const router = useRouter()
+
+  const { state, dispatch } = useContext(Store)
+
+  const addToCartHandler = async product => {
+    const existItem = state.cart.cartItems.find(x => x._id === product._id)
+    const quantity = existItem ? existItem.quantity + 1 : 1
+    const { data } = await axios.get(`/api/products/${product._id}`)
+    if (data.countInStock < quantity) {
+      window.alert("Sorry. Product is out of stock")
+      return
+    }
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } })
+    router.push("/cart")
+  }
   return (
     <Layout>
       <div>
@@ -38,7 +57,11 @@ export default function Home(props) {
                 </NextLink>
                 <CardActions>
                   <Typography>${product.price}</Typography>
-                  <Button size="small" color="primary">
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => addToCartHandler(product)}
+                  >
                     Add to cart
                   </Button>
                 </CardActions>
@@ -58,6 +81,6 @@ export async function getServerSideProps() {
   return {
     props: {
       products: products.map(db.convertDocToObj),
-    }
+    },
   }
 }
