@@ -8,6 +8,10 @@ const useStyles = makeStyles({
       marginLeft: 10,
     },
   },
+  navbarButton: {
+    color: "#ffffff",
+    textTransform: 'initial',
+  },
   brand: {
     fontWeight: 'bold',
     fontSize: '1.5rem'
