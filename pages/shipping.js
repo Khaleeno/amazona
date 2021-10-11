@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import React, { useContext } from 'react'
-import Layout from '../components/Layout'
 import { Store } from '../utils/store'
 
 export default function Shipping() {
@@ -12,8 +11,6 @@ export default function Shipping() {
     router.push('/login?redirect=/shipping')
   }
   return (
-    <Layout title="Shipping">
-
-    </Layout>
+    <div>Shipping page</div>
   )
 }
