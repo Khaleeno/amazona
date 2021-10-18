@@ -1,17 +1,39 @@
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken"
 
-const signToken = (user) => {
-  return jwt.sign({
-    _id:user._id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-  },
-  process.env.JWT_SECRET,
-  {
-    expiresIn: '30d',
-  }
+const signToken = user => {
+  return jwt.sign(
+    {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "30d",
+    }
   )
 }
 
-export default signToken
+const isAuth = async (req, res, next) => {
+  const { authorization } = req.headers
+  if (authorization) {
+    // Bearer xxx
+    
+    // const token = authorization.slice(7, authorization.length)
+    const token = req.headers.authorization.split(' ')[1];
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
+      if (err) {
+        res.status(401).send({ message: "Token is not valid" })
+      } else {
+        req.user = decode
+        next()
+      }
+    })
+  } else {
+    res.status(401).send({ message: "Token is not supplied" })
+  }
+}
+
+export { signToken, isAuth }

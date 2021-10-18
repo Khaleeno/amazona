@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { Store } from "../utils/store"
 
 import Layout from "../components/Layout"
-import CheckoutWizard from "../components/checkoutWizard"
+import CheckoutWizard from "../components/CheckoutWizard"
 import useStyles from "../utils/styles"
 import {
   Button,
